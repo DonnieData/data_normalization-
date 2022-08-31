@@ -1,0 +1,42 @@
+fact_transactions  
+- 
+transmission_datetime TEXT 
+date_id INTEGER  FK >- dim_date.date_id
+id TEXT
+payment_type_id TEXT FK >- dim_payment.payment_type_id
+event_id TEXT
+block_id TEXT
+post_id TEXT
+gross_paid_amt DECIMAL
+meter_event_type TEXT
+street_block TEXT
+ssession_start_dt DATETIME
+ession_end_dt DATETIME 
+
+dim_date
+-
+date_id PK INTEGER
+session_start_dt DATE
+session_end_date DATE
+
+time_id FK
+
+
+
+dim_time
+-
+time_id PK
+time TIME
+
+
+dim_payment 
+-
+payment_type_id INTEGER PK
+payment_type TEXT 
+
+
+
+
+
+
+
