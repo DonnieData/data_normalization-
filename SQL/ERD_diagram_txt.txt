@@ -1,42 +1,24 @@
 fact_transactions  
 - 
 transmission_datetime TEXT 
-date_id INTEGER  FK >- dim_date.date_id
-id TEXT
 payment_type_id TEXT FK >- dim_payment.payment_type_id
-event_id TEXT
-block_id TEXT
+street_id INTEGER FK
 post_id TEXT
 gross_paid_amt DECIMAL
 meter_event_type TEXT
 street_block TEXT
-ssession_start_dt DATETIME
-ession_end_dt DATETIME 
+session_start_dt TIMESTAMP
+session_end_date TIMESTAMP
 
-dim_date
--
-date_id PK INTEGER
-session_start_dt DATE
-session_end_date DATE
-
-time_id FK
-
-
-
-dim_time
--
-time_id PK
-time TIME
+dim_street 
+- 
+street_id INTEGER PK FK >- fact_transactions.street_id
+street_block TEXT
 
 
 dim_payment 
 -
 payment_type_id INTEGER PK
 payment_type TEXT 
-
-
-
-
-
 
 
