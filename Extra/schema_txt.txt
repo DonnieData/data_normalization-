@@ -12,7 +12,7 @@ session_end_date TIMESTAMP
 
 dim_street 
 - 
-street_block_id INTEGER PK FK >- fact_transactions.street_id
+street_block_id INTEGER PK FK >- fact_transactions.street_block_id
 street_block TEXT
 
 
