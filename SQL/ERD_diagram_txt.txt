@@ -2,7 +2,7 @@ fact_transactions
 - 
 transmission_datetime TEXT 
 payment_type_id TEXT FK >- dim_payment.payment_type_id
-street_id INTEGER FK
+street_block_id INTEGER FK
 post_id TEXT
 gross_paid_amt DECIMAL
 meter_event_type TEXT
@@ -12,7 +12,7 @@ session_end_date TIMESTAMP
 
 dim_street 
 - 
-street_id INTEGER PK FK >- fact_transactions.street_id
+street_block_id INTEGER PK FK >- fact_transactions.street_id
 street_block TEXT
 
 
