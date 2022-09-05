@@ -7,7 +7,7 @@ import config
 
 
 #get data 
-class getData(self):
+class GetData(self):
     #api request
     def __init__(self):
     self.endpoint = "https://data.sfgov.org/resource/imvp-dq3v.json?$limit=1000"
@@ -18,11 +18,19 @@ class getData(self):
     
     
     
-class insertData(self,data):
+class InsertData(self,data):
     
     #connect to databse 
     def __init__(self):
         conn = psycopg2.connect(database="donniedata", user=config.db_user, 
                                         password=config.db_password, sslmode="disable")
         cur = conn.cursor();  
-s
+
+        
+def main():
+    data = GetData()
+    insert = InsertData()
+    
+if __name__ == "__main__":
+    main()
+    
