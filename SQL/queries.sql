@@ -46,3 +46,8 @@ ALTER TABLE sf_ticket_trans.dim_payment
 ADD PRIMARY KEY (payment_type_id),
 ADD CONSTRAINT unique_payment_type UNIQUE (payment_type)
     
+
+-- trucate table and all forieng referenced tables with casacade and restart identity sequence if any 
+TRUNCATE sf_ticket_trans.fact_transactions RESTART IDENTITY CASCADE
+TRUNCATE sf_ticket_trans.dim_payment RESTART IDENTITY CASCADE
+TRUNCATE sf_ticket_trans.dim_street RESTART IDENTITY CASCADE

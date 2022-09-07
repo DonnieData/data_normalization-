@@ -1,4 +1,4 @@
-# 
+#insrt quert for fact table
 fact_tran_insert ='''
 INSERT INTO sf_ticket_trans.fact_transactions (
     transmission_datetime ,
@@ -23,8 +23,8 @@ VALUES (
     %(sessionend)s 
     );
     '''
-
-dim_paymeny_insert = sql = '''
+#insert query for dim_payment
+dim_paymeny_insert = '''
 DO $$
 BEGIN 
 IF NOT EXISTS (select 1 from sf_ticket_trans.dim_payment where payment_type = %(payment)s) 
@@ -34,6 +34,7 @@ END;
 $$ 
 '''
 
+#insert query for dim_street
 dim_street_insert = '''
 DO $$
 BEGIN 
