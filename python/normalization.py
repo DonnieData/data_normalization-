@@ -9,13 +9,14 @@ import queries
 #get data 
 class GetData():
     #api request
-     def __init__(self):
-        print("requesting data")
-        self.endpoint = "https://data.sfgov.org/resource/imvp-dq3v.json?$limit=1000"
+     def __init__(self, endpoint_url):
+        #print("requesting data")
+        self.endpoint = endpoint_url
         self.response = requests.get(url=self.endpoint)
         self.data = self.response.json() 
-        print("data request complete")
+        print(len(self.data))
     
+
     
 #insert data into database schema   
 class InsertData():
@@ -23,7 +24,7 @@ class InsertData():
     #connect to databse 
     def __init__(self, data):
         conn = psycopg2.connect(database="donniedata", user=config.db_user, 
-                                password=config.db_password, sslmode="disable")
+                                    password=config.db_password, sslmode="disable")
         cur = conn.cursor();  
         conn.autocommit = True
         
@@ -59,8 +60,21 @@ class InsertData():
         
 #run      
 def main():
-    response_data = GetData()
-    insert = InsertData(response_data.data)
+    #create date ranges to query with get request
+    date_select = pd.date_range('2022-08-01','2022-09-01',freq='D')
+    date_select = [str(datetime.date(i)) for i in dates]
+    
+    #loop through date pairing and get data , normalize and insert by day
+    for i in range(len(dates)-1): 
+        
+        url_param = f"""https://data.sfgov.org/resource/imvp-dq3v.json?$limit=100000
+                       &$where=session_start_dt between '{dates[i]}' and '{dates[i+1]}'"""
+        
+        response_data = GetData(url_param)
+        print(f"data request for {date_select[i]} complete")
+        
+        insert = InsertData(response_data.data)
+        print(f"normalization and insertion for {date_select[i]} complete")
     
 if __name__ == "__main__":
     main()
