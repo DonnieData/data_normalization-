@@ -1,9 +1,11 @@
 #import dependencies 
 import requests 
 from sqlalchemy import create_engine
+from datetime import datetime
 import psycopg2
 import config 
 import queries
+import pandas as pd
 
 
 #get data 
@@ -14,7 +16,6 @@ class GetData():
         self.endpoint = endpoint_url
         self.response = requests.get(url=self.endpoint)
         self.data = self.response.json() 
-        print(len(self.data))
     
 
     
@@ -52,26 +53,27 @@ class InsertData():
                      'sessionstart' : data[i]['session_start_dt'],
                      'sessionend': data[i]['session_end_dt']
                     })
-            counter += 1 
-            if counter % 100 == 0:
-                print(f"{counter} of {size} isnerted")
+            #counter += 1 
+            #if counter % 100 == 0:
+                #print(f"{counter} of {size} isnerted")
                 
       
         
 #run      
 def main():
     #create date ranges to query with get request
-    date_select = pd.date_range('2022-08-01','2022-09-01',freq='D')
-    date_select = [str(datetime.date(i)) for i in dates]
+    date_select = pd.date_range('2022-08-01','2022-08-03',freq='D')
+    date_select = [str(datetime.date(i)) for i in date_select]
     
     #loop through date pairing and get data , normalize and insert by day
-    for i in range(len(dates)-1): 
+    for i in range(len(date_select)-1): 
         
         url_param = f"""https://data.sfgov.org/resource/imvp-dq3v.json?$limit=100000
-                       &$where=session_start_dt between '{dates[i]}' and '{dates[i+1]}'"""
+                       &$where=session_start_dt between '{date_select[i]}' and '{date_select[i+1]}'"""
         
         response_data = GetData(url_param)
         print(f"data request for {date_select[i]} complete")
+        print(f"Date: {date_select[i]}, \n Rows: {len(response_data.data)}")
         
         insert = InsertData(response_data.data)
         print(f"normalization and insertion for {date_select[i]} complete")

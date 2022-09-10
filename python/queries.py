@@ -1,6 +1,11 @@
 #insrt quert for fact table
 fact_tran_insert ='''
-INSERT INTO sf_ticket_trans.fact_transactions (
+DO $$
+BEGIN 
+IF NOT EXISTS 
+    (select 1 from sf_ticket_trans.fact_transactions 
+        where transmission_datetime = %(transmission_dt)s) 
+THEN INSERT INTO sf_ticket_trans.fact_transactions (
     transmission_datetime ,
     payment_type_id,
     street_block_id ,
@@ -22,6 +27,9 @@ VALUES (
     %(sessionstart)s ,
     %(sessionend)s 
     );
+END IF;
+END;
+$$ 
     '''
 #insert query for dim_payment
 dim_paymeny_insert = '''
