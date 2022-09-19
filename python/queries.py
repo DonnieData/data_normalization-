@@ -52,3 +52,15 @@ END IF;
 END;
 $$ 
 '''
+
+#insert query for dim_meterPost
+dim_meter_insert =  '''
+DO $$
+BEGIN 
+IF NOT EXISTS (select 1 from sf_ticket_trans.dim_meterPost where post_id = %(postid)s) 
+THEN INSERT INTO sf_ticket_trans.dim_meterPost (street_block) VALUES ( %(postid)s  );
+END IF;
+END;
+$$ 
+'''
+
