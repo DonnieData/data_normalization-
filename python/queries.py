@@ -52,3 +52,37 @@ END IF;
 END;
 $$ 
 '''
+
+#insert query for dim_meterPost
+dim_meter_insert =  '''
+DO $$
+BEGIN 
+IF NOT EXISTS (select 1 from sf_ticket_trans.dim_meterPost where post_id = %(postid)s) 
+THEN INSERT INTO sf_ticket_trans.dim_meterPost (post_id) VALUES ( %(postid)s  );
+END IF;
+END;
+$$ 
+'''
+
+#insert query for dim_grossPayAmmount
+dim_payammount_insert = '''
+DO $$
+BEGIN 
+IF NOT EXISTS (select 1 from sf_ticket_trans.dim_grossPayAmmount where pay_ammount = %(p_ammount)s) 
+THEN INSERT INTO sf_ticket_trans.dim_grossPayAmmount (pay_ammount) VALUES ( %(p_ammount)s  );
+END IF;
+END;
+$$ 
+'''
+
+#insert query for dim_grossPayAmmount
+dim_timeGroup_insert = '''
+DO $$
+BEGIN 
+IF NOT EXISTS (select 1 from sf_ticket_trans.dim_timeGroup where time_group = %(time_g)s) 
+THEN INSERT INTO sf_ticket_trans.dim_timeGroup (time_group) VALUES ( %(time_g)s  );
+END IF;
+END;
+$$ 
+'''
+
