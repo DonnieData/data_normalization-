@@ -4,4 +4,4 @@ def group_time(time_string):
     hour_extract = time_extract.strftime('%H')
     minute_grouped = str(round(time_extract.minute / 5) *5) 
     time_group = datetime.strptime(hour_extract + minute_grouped, '%H%M').time()
-    return time_group
+    return time_group 
