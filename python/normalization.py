@@ -6,21 +6,40 @@ import psycopg2
 import config 
 import queries
 import pandas as pd
-
+import norm_functions
 
 #get data 
-class GetData():
+class GetData:
     #api request
      def __init__(self, endpoint_url):
         #print("requesting data")
         self.endpoint = endpoint_url
         self.response = requests.get(url=self.endpoint)
         self.data = self.response.json() 
+        
+        
+#transform data    
+class TransformData:
+    def __init__(self, data): 
+        self.data = data 
+        for i in range(len(data)):
+            self.data[i]['start_time_group'] = norm_f.group_time(self.data[1]['session_start_dt'])
+            self.data[i]['end_time_group'] = norm_f.group_time(self.data[1]['session_end_dt'])
+            #start date 
+            self.data[i]['start_date'] = norm_f.get_date(self.data[1]['session_start_dt'])
+            #end date 
+            self.data[i]['end_date'] = norm_f.get_date(self.data[1]['session_end_dt'])
+            #ground gross payment 
+            self.data[i]['pay_group'] = norm_f.roound_gross(self.data[i]['gross_paid_amt']) 
+            
+        
     
-
+    
+    
+    
     
 #insert data into database schema   
-class InsertData():
+class InsertData:
     
     #connect to databse 
     def __init__(self, data):
@@ -60,7 +79,7 @@ class InsertData():
       
         
 #run      
-def main():
+def main:
     #create date ranges to query with get request
     date_select = pd.date_range('2022-08-01','2022-08-03',freq='D')
     date_select = [str(datetime.date(i)) for i in date_select]
@@ -71,10 +90,16 @@ def main():
         url_param = f"""https://data.sfgov.org/resource/imvp-dq3v.json?$limit=100000
                        &$where=session_start_dt between '{date_select[i]}' and '{date_select[i+1]}'"""
         
+        #retreive data 
         response_data = GetData(url_param)
         print(f"data request for {date_select[i]} complete")
         print(f"Date: {date_select[i]}, \n Rows: {len(response_data.data)}")
         
+        #transform data
+        #response_data.data = TransformData(response_data.data)
+        
+        
+        #insert data 
         insert = InsertData(response_data.data)
         print(f"normalization and insertion for {date_select[i]} complete")
     
