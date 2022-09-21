@@ -6,7 +6,7 @@ import psycopg2
 import config 
 import queries
 import pandas as pd
-import norm_functions
+import norm_functions as norm_f
 
 #get data 
 class GetData:
