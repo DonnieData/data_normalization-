@@ -18,19 +18,21 @@ class GetData:
         self.data = self.response.json() 
         
         
-#transform data    
+#class to transform data    
+#orignal data object is modified instead of assinging as class attribute which would copy the object 
 class TransformData:
     def __init__(self, data): 
-        self.data = data 
+        data = data 
         for i in range(len(data)):
-            self.data[i]['start_time_group'] = norm_f.group_time(self.data[1]['session_start_dt'])
-            self.data[i]['end_time_group'] = norm_f.group_time(self.data[1]['session_end_dt'])
+            data[i]['start_time_group'] = norm_f.group_time(data[i]['session_start_dt'])
+            data[i]['end_time_group'] = norm_f.group_time(data[i]['session_end_dt'])
             #start date 
-            self.data[i]['start_date'] = norm_f.get_date(self.data[1]['session_start_dt'])
+            data[i]['start_date'] = norm_f.get_date(data[i]['session_start_dt'])
             #end date 
-            self.data[i]['end_date'] = norm_f.get_date(self.data[1]['session_end_dt'])
+            data[i]['end_date'] = norm_f.get_date(data[i]['session_end_dt'])
             #ground gross payment 
-            self.data[i]['pay_group'] = norm_f.roound_gross(self.data[i]['gross_paid_amt']) 
+            data[i]['pay_group'] = norm_f.roound_gross(data[i]['gross_paid_amt']) 
+               
             
         
     
