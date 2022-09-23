@@ -20,9 +20,11 @@ class GetData:
         
 #class to transform data    
 #orignal data object is modified instead of assinging as class attribute which would copy the object 
-class TransformData:
-    def __init__(self, data): 
-        data = data 
+class TransformData:  
+    def __init__(self):
+        self.counter = 0 
+    
+    def td(self, data): 
         for i in range(len(data)):
             data[i]['start_time_group'] = norm_f.group_time(data[i]['session_start_dt'])
             data[i]['end_time_group'] = norm_f.group_time(data[i]['session_end_dt'])
@@ -32,10 +34,9 @@ class TransformData:
             data[i]['end_date'] = norm_f.get_date(data[i]['session_end_dt'])
             #ground gross payment 
             data[i]['pay_group'] = norm_f.roound_gross(data[i]['gross_paid_amt']) 
-               
+            self.counter += 1 
             
-        
-    
+               
     
     
     
@@ -86,6 +87,7 @@ def main:
     date_select = pd.date_range('2022-08-01','2022-08-03',freq='D')
     date_select = [str(datetime.date(i)) for i in date_select]
     
+    
     #loop through date pairing and get data , normalize and insert by day
     for i in range(len(date_select)-1): 
         
@@ -98,7 +100,7 @@ def main:
         print(f"Date: {date_select[i]}, \n Rows: {len(response_data.data)}")
         
         #transform data
-        #response_data.data = TransformData(response_data.data)
+        response_data.data = TransformData(response_data.data)
         
         
         #insert data 
