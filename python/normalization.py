@@ -24,7 +24,7 @@ class TransformData:
     def __init__(self):
         self.counter = 0 
     
-    def td(self, data): 
+    def norm(self, data): 
         for i in range(len(data)):
             data[i]['start_time_group'] = norm_f.group_time(data[i]['session_start_dt'])
             data[i]['end_time_group'] = norm_f.group_time(data[i]['session_end_dt'])
@@ -36,10 +36,6 @@ class TransformData:
             data[i]['pay_group'] = norm_f.roound_gross(data[i]['gross_paid_amt']) 
             self.counter += 1 
             
-               
-    
-    
-    
     
 #insert data into database schema   
 class InsertData:
@@ -99,8 +95,10 @@ def main:
         print(f"data request for {date_select[i]} complete")
         print(f"Date: {date_select[i]}, \n Rows: {len(response_data.data)}")
         
-        #transform data
-        response_data.data = TransformData(response_data.data)
+        #initialize class
+        transform =  TransformData() 
+        #transform data 
+        transform.norm(response_data)
         
         
         #insert data 
