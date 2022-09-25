@@ -33,5 +33,5 @@ pay_ammount_id INTEGER REFERENCES sf_ticket_trans.dim_grossPayAmmount(pay_ammoun
 session_start_date DATE,
 session_end_date DATE,
 session_start_time_id INTEGER REFERENCES sf_ticket_trans.dim_timeGroup(time_group_id),
-session_end_time_id INTEGER REFERENCES sf_ticket_trans.dim_timeGroup(time_group_id), 
+session_end_time_id INTEGER REFERENCES sf_ticket_trans.dim_timeGroup(time_group_id) 
 );
