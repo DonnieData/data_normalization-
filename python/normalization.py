@@ -67,9 +67,12 @@ class InsertData:
                      'street': data[i]['street_block'],
                      'post' : data[i]['post_id'],
                      'meter_event': data[i]['meter_event_type'],
-                     'paid_amt': data[i]['gross_paid_amt'],
-                     'sessionstart' : data[i]['session_start_dt'],
-                     'sessionend': data[i]['session_end_dt']
+                  'paid_amt': data[i]['pay_group'],
+                    'start_date': data[i]['start_date'] ,
+                'end_date' : data[i]['end_date'],
+                'start_time': data[i]['start_time_group'], 
+                'end_time': data[i]['end_time_group']
+            
                     })
             #counter += 1 
             #if counter % 100 == 0:

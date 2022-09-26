@@ -9,11 +9,13 @@ THEN INSERT INTO sf_ticket_trans.fact_transactions (
     transmission_datetime ,
     payment_type_id,
     street_block_id ,
-    post_id ,
+    meter_post_id ,
     meter_event_type ,
-    gross_paid_amt ,
-    session_start_dt ,
-    session_end_date 
+    pay_ammount_id,
+    session_start_date ,
+    session_end_date,
+    session_start_time_id,
+    session_end_time_id
     )
 VALUES (
     %(transmission_dt)s ,
@@ -21,11 +23,18 @@ VALUES (
         FROM sf_ticket_trans.dim_payment WHERE payment_type = %(payment)s ) ,
     (SELECT street_block_id 
         FROM sf_ticket_trans.dim_street WHERE street_block = %(street)s ) ,
-    %(post)s ,
-    %(meter_event)s ,
-    %(paid_amt)s ,
-    %(sessionstart)s ,
-    %(sessionend)s 
+    (SELECT meter_post_id 
+        FROM sf_ticket_trans.dim_meterPost WHERE post_id = %(post)s ) ,
+    %(meter_event)s , 
+        SELECT pay_ammount_id 
+        FROM sf_ticket_trans.dim_grossPayAmmount WHERE pay_ammount = %(paid_amt)s ),
+    %(start_date)s,
+    %(end_date)s,
+    SELECT time_group_id  
+        FROM sf_ticket_trans.dim_timeGroup WHERE time_group = %(start_time)s ) ,
+     SELECT time_group_id  
+        FROM sf_ticket_trans.dim_timeGroup WHERE time_group = %(end_time)s 
+
     );
 END IF;
 END;

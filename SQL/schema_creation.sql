@@ -10,7 +10,7 @@ street_block TEXT NOT NULL CONSTRAINT unique_street UNIQUE
 
 CREATE TABLE sf_ticket_trans.dim_meterPost( 
 meter_post_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-post_id TEXTTEXT NOT NULL CONSTRAINT unique_post UNIQUE
+post_id TEXT NOT NULL CONSTRAINT unique_post UNIQUE
 );
 
 CREATE TABLE sf_ticket_trans.dim_grossPayAmmount( 
@@ -35,3 +35,5 @@ session_end_date DATE,
 session_start_time_id INTEGER REFERENCES sf_ticket_trans.dim_timeGroup(time_group_id),
 session_end_time_id INTEGER REFERENCES sf_ticket_trans.dim_timeGroup(time_group_id) 
 );
+
+
