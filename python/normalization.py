@@ -49,12 +49,28 @@ class InsertData:
         
         #insert data into dimension tables -- perfromed first due to FK constraints
         print("inserting dimension tables")
-        for i in range(len(data)): 
             #dim_payment
+        for i in range(len(data)): 
             cur.execute(queries.dim_paymeny_insert, {'payment':data[i]['payment_type']})
-        for i in range(len(data)):
             #dim_street
+        for i in range(len(data)):
             cur.execute(queries.dim_street_insert, {'street':data[i]['street_block']})
+        #meter post
+        for i in range(len(data)):
+            cur.execute(queries.dim_meterPost, {'post':data[i]['post_id']})
+            
+        #dim_grossPayAmmount
+        for i in range(len(data)):
+            cur.execute(queries.dim_grossPayAmmount, {'paid_amt':data[i]['pay_group']})
+            
+        #time 
+        for i in range(len(data)):
+            cur.execute(queries.dim_timeGroup_insert, {'time_g':data[i]['start_time_group']})
+        for i in range(len(data)):
+            cur.execute(queries.dim_timeGroup_insert, {'time_g':data[i]['end_time_group']})
+        
+  
+            
             
         #insert data into fact table 
         print("--Fact Table--")

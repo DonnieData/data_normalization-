@@ -66,8 +66,8 @@ $$
 dim_meter_insert =  '''
 DO $$
 BEGIN 
-IF NOT EXISTS (select 1 from sf_ticket_trans.dim_meterPost where post_id = %(postid)s) 
-THEN INSERT INTO sf_ticket_trans.dim_meterPost (post_id) VALUES ( %(postid)s  );
+IF NOT EXISTS (select 1 from sf_ticket_trans.dim_meterPost where post_id = %(post)s) 
+THEN INSERT INTO sf_ticket_trans.dim_meterPost (post_id) VALUES ( %(post)s  );
 END IF;
 END;
 $$ 
@@ -77,8 +77,8 @@ $$
 dim_payammount_insert = '''
 DO $$
 BEGIN 
-IF NOT EXISTS (select 1 from sf_ticket_trans.dim_grossPayAmmount where pay_ammount = %(p_ammount)s) 
-THEN INSERT INTO sf_ticket_trans.dim_grossPayAmmount (pay_ammount) VALUES ( %(p_ammount)s  );
+IF NOT EXISTS (select 1 from sf_ticket_trans.dim_grossPayAmmount where pay_ammount = %(paid_amt)s) 
+THEN INSERT INTO sf_ticket_trans.dim_grossPayAmmount (pay_ammount) VALUES ( %(paid_amt)s  );
 END IF;
 END;
 $$ 
