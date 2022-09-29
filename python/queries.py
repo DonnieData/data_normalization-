@@ -26,14 +26,14 @@ VALUES (
     (SELECT meter_post_id 
         FROM sf_ticket_trans.dim_meterPost WHERE post_id = %(post)s ) ,
     %(meter_event)s , 
-        SELECT pay_ammount_id 
+        (SELECT pay_ammount_id 
         FROM sf_ticket_trans.dim_grossPayAmmount WHERE pay_ammount = %(paid_amt)s ),
     %(start_date)s,
     %(end_date)s,
-    SELECT time_group_id  
+    (SELECT time_group_id  
         FROM sf_ticket_trans.dim_timeGroup WHERE time_group = %(start_time)s ) ,
-     SELECT time_group_id  
-        FROM sf_ticket_trans.dim_timeGroup WHERE time_group = %(end_time)s 
+     (SELECT time_group_id  
+        FROM sf_ticket_trans.dim_timeGroup WHERE time_group = %(end_time)s)
 
     );
 END IF;
