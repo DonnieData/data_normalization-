@@ -74,7 +74,7 @@ $$
 '''
 
 #insert query for dim_grossPayAmmount
-dim_payammount_insert = '''
+dim_gross_pay_amt = '''
 DO $$
 BEGIN 
 IF NOT EXISTS (select 1 from sf_ticket_trans.dim_grossPayAmmount where pay_ammount = %(paid_amt)s) 

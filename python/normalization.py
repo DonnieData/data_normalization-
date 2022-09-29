@@ -57,11 +57,11 @@ class InsertData:
             cur.execute(queries.dim_street_insert, {'street':data[i]['street_block']})
         #meter post
         for i in range(len(data)):
-            cur.execute(queries.dim_meterPost, {'post':data[i]['post_id']})
+            cur.execute(queries.dim_meter_insert, {'post':data[i]['post_id']})
             
         #dim_grossPayAmmount
         for i in range(len(data)):
-            cur.execute(queries.dim_grossPayAmmount, {'paid_amt':data[i]['pay_group']})
+            cur.execute(queries.dim_gross_pay_amt, {'paid_amt':data[i]['pay_group']})
             
         #time 
         for i in range(len(data)):
@@ -97,7 +97,7 @@ class InsertData:
       
         
 #run      
-def main:
+def main():
     #create date ranges to query with get request
     date_select = pd.date_range('2022-08-01','2022-08-03',freq='D')
     date_select = [str(datetime.date(i)) for i in date_select]
@@ -117,7 +117,7 @@ def main:
         #initialize class
         transform =  TransformData() 
         #transform data 
-        transform.norm(response_data)
+        transform.norm(response_data.data)
         
         
         #insert data 
