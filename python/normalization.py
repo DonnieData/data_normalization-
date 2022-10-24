@@ -8,6 +8,20 @@ import queries
 import pandas as pd
 import norm_functions as norm_f
 
+#class to log retreived data
+class DataLog: 
+    def __init__(self):
+        self.log_df = pd.DataFrame({'data date':[],'Rows':[]})
+        
+    def log_table(self,data_date, table_row_count):
+        self.log_df = self.log_df.append({'data date':data_date,'Rows':table_row_count}, ignore_index=True)
+    
+    def export_log(self):
+        self.save_time = datetime.now()
+        self.save_time = str(self.save_time)[:8].replace(':','')
+        self.save_name = 'sf_trans_log_' + self.save_t
+        self.log_df.to_csv(f'{self.save_name}.csv', index=False)
+
 #get data 
 class GetData:
     #api request
@@ -47,7 +61,7 @@ class InsertData:
         cur = conn.cursor();  
         conn.autocommit = True
         
-        #insert data into dimension tables -- perfromed first due to FK constraints
+        #insert data into dimension tables -- performed first due to FK constraints
         print("inserting dimension tables")
             #dim_payment
         for i in range(len(data)): 
@@ -99,9 +113,11 @@ class InsertData:
 #run      
 def main():
     #create date ranges to query with get request
-    date_select = pd.date_range('2022-08-01','2022-08-02',freq='D')
+    date_select = pd.date_range('2022-08-03','2022-08-04',freq='D')
     date_select = [str(datetime.date(i)) for i in date_select]
     
+    #instantiate a log 
+    data_log = DataLog()
     
     #loop through date pairing and get data , normalize and insert by day
     for i in range(len(date_select)-1): 
@@ -112,17 +128,20 @@ def main():
         #retreive data 
         response_data = GetData(url_param)
         print(f"data request for {date_select[i]} complete")
-        print(f"Date: {date_select[i]}, \n Rows: {len(response_data.data)}")
+        data_log.log_table(date_select[i],len(response_data.data))
+        #print(f"Date: {date_select[i]}, \n Rows: {len(response_data.data)}")
         
         #initialize class
-        transform =  TransformData() 
+        #transform = TransformData() 
         #transform data 
-        transform.norm(response_data.data)
+        #transform.norm(response_data.data)
         
         
         #insert data 
-        insert = InsertData(response_data.data)
-        print(f"normalization and insertion for {date_select[i]} complete")
+        #insert = InsertData(response_data.data)
+        #print(f"normalization and insertion for {date_select[i]} complete")
+        
+    data_log.export_log()
     
 if __name__ == "__main__":
     main()
