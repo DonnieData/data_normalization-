@@ -19,7 +19,7 @@ class DataLog:
     def export_log(self):
         self.save_time = datetime.now()
         self.save_time = str(self.save_time)[:8].replace(':','')
-        self.save_name = 'sf_trans_log_' + self.save_t
+        self.save_name = 'sf_trans_log_' + self.save_time
         self.log_df.to_csv(f'{self.save_name}.csv', index=False)
 
 #get data 
