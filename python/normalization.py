@@ -10,6 +10,7 @@ import norm_functions as norm_f
 
 #class to log retreived data
 class DataLog: 
+<<<<<<< HEAD
     #create dataframe for logging
     def __init__(self):
         self.log_df = pd.DataFrame({'data date':[],'Rows':[]})
@@ -17,6 +18,14 @@ class DataLog:
     def log_table(self,data_date, table_row_count):
         self.log_df = self.log_df.append({'data date':data_date,'Rows':table_row_count}, ignore_index=True)
     #export log
+=======
+    def __init__(self):
+        self.log_df = pd.DataFrame({'data date':[],'Rows':[]})
+        
+    def log_table(self,data_date, table_row_count):
+        self.log_df = self.log_df.append({'data date':data_date,'Rows':table_row_count}, ignore_index=True)
+    
+>>>>>>> f91134b5d21610417ce5e5a17cbb908c379c1d83
     def export_log(self):
         self.save_time = datetime.strftime(datetime.now(),'%Y%m%dT%H%M%S')
         self.log_df.to_csv(f'data_log/sf_tran_log_{self.save_time}.csv', index=False)
@@ -124,6 +133,7 @@ def main():
                        &$where=session_start_dt between '{date_select[i]}' and '{date_select[i+1]}'"""
         
         #retreive data 
+<<<<<<< HEAD
         print(f"\n requesting data for {date_select[i]}")
         response_data = GetData(url_param)
         print(f"data request for {date_select[i]} complete")
@@ -133,15 +143,29 @@ def main():
     
         print(f"transforming data for {date_select[i]}")
         transform = TransformData() 
+=======
+        print(f"requesting data for {date_select[i]}")
+        response_data = GetData(url_param)
+        print(f"data request for {date_select[i]} complete")
+        data_log.log_table(date_select[i],len(response_data.data))
+        #print(f"Date: {date_select[i]}, \n Rows: {len(response_data.data)}")
+        
+        #initialize class
+        print(f"transforming data for {date_select[i]}")
+        #transform = TransformData() 
+>>>>>>> f91134b5d21610417ce5e5a17cbb908c379c1d83
         #transform data 
-        transform.norm(response_data.data)
+        #transform.norm(response_data.data)
         
     
         #insert data 
-        insert = InsertData(response_data.data)
+        #insert = InsertData(response_data.data)
         print(f"normalization and insertion for {date_select[i]} complete")
         
+<<<<<<< HEAD
     #export log
+=======
+>>>>>>> f91134b5d21610417ce5e5a17cbb908c379c1d83
     data_log.export_log()
     
 if __name__ == "__main__":
