@@ -17,16 +17,13 @@ class DataLog:
         self.log_df = self.log_df.append({'data date':data_date,'Rows':table_row_count}, ignore_index=True)
     
     def export_log(self):
-        self.save_time = datetime.now()
-        self.save_time = str(self.save_time)[:8].replace(':','')
-        self.save_name = 'sf_trans_log_' + self.save_time
-        self.log_df.to_csv(f'{self.save_name}.csv', index=False)
+        self.save_time = datetime.strftime(datetime.now(),'%Y%m%dT%H%M%S')
+        self.log_df.to_csv(f'data_log/sf_tran_log_{self.save_time}.csv', index=False)
 
 #get data 
 class GetData:
     #api request
      def __init__(self, endpoint_url):
-        #print("requesting data")
         self.endpoint = endpoint_url
         self.response = requests.get(url=self.endpoint)
         self.data = self.response.json() 
@@ -87,7 +84,7 @@ class InsertData:
             
             
         #insert data into fact table 
-        print("--Fact Table--")
+        print("--Inserting Fact Table--")
         counter = 0
         size = len(data)
         for i in range(len(data)):
@@ -126,12 +123,14 @@ def main():
                        &$where=session_start_dt between '{date_select[i]}' and '{date_select[i+1]}'"""
         
         #retreive data 
+        print(f"requesting data for {date_select[i]}")
         response_data = GetData(url_param)
         print(f"data request for {date_select[i]} complete")
         data_log.log_table(date_select[i],len(response_data.data))
         #print(f"Date: {date_select[i]}, \n Rows: {len(response_data.data)}")
         
         #initialize class
+        print(f"transforming data for {date_select[i]}")
         #transform = TransformData() 
         #transform data 
         #transform.norm(response_data.data)
@@ -139,7 +138,7 @@ def main():
         
         #insert data 
         #insert = InsertData(response_data.data)
-        #print(f"normalization and insertion for {date_select[i]} complete")
+        print(f"normalization and insertion for {date_select[i]} complete")
         
     data_log.export_log()
     
