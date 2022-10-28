@@ -6,26 +6,20 @@ import psycopg2
 import config 
 import queries
 import pandas as pd
+import time
 import norm_functions as norm_f
 
 #class to log retreived data
 class DataLog: 
-<<<<<<< HEAD
     #create dataframe for logging
     def __init__(self):
-        self.log_df = pd.DataFrame({'data date':[],'Rows':[]})
+        self.log_df = pd.DataFrame({'Data Date':[],'Rows':[],'Execution Time(minutes)':[]})
     #log date and size   
-    def log_table(self,data_date, table_row_count):
-        self.log_df = self.log_df.append({'data date':data_date,'Rows':table_row_count}, ignore_index=True)
-    #export log
-=======
-    def __init__(self):
-        self.log_df = pd.DataFrame({'data date':[],'Rows':[]})
         
-    def log_table(self,data_date, table_row_count):
-        self.log_df = self.log_df.append({'data date':data_date,'Rows':table_row_count}, ignore_index=True)
-    
->>>>>>> f91134b5d21610417ce5e5a17cbb908c379c1d83
+    def log_table(self,data_date, table_row_count, exec_time):
+        self.log_df = self.log_df.append({'Data Date':data_date,'Rows':table_row_count,'Execution Time(minutes)':exec_time}, ignore_index=True)
+        
+    #export log
     def export_log(self):
         self.save_time = datetime.strftime(datetime.now(),'%Y%m%dT%H%M%S')
         self.log_df.to_csv(f'data_log/sf_tran_log_{self.save_time}.csv', index=False)
@@ -89,8 +83,6 @@ class InsertData:
             cur.execute(queries.dim_timeGroup_insert, {'time_g':data[i]['start_time_group']})
         for i in range(len(data)):
             cur.execute(queries.dim_timeGroup_insert, {'time_g':data[i]['end_time_group']})
-        
-  
             
             
         #insert data into fact table 
@@ -113,59 +105,52 @@ class InsertData:
                     })
             #counter += 1 
             #if counter % 100 == 0:
-                #print(f"{counter} of {size} isnerted")
-                
-      
+                #print(f"{counter} of {size} isnerted")   
         
 #run      
 def main():
     #create date ranges to query with get request
-    date_select = pd.date_range('2022-08-03','2022-08-04',freq='D')
+    date_select = pd.date_range('2022-08-01','2022-08-31',freq='D')
     date_select = [str(datetime.date(i)) for i in date_select]
     
     #instantiate a log 
     data_log = DataLog()
     
     #loop through date pairing and get data , normalize and insert by day
-    for i in range(len(date_select)-1): 
+    for i in range(len(date_select)-1): #-1 to reduce len by 1, data is selected between ranges and not on singurlar day
+        
+        #get start time 
+        start_time = time.time()
         
         url_param = f"""https://data.sfgov.org/resource/imvp-dq3v.json?$limit=100000
                        &$where=session_start_dt between '{date_select[i]}' and '{date_select[i+1]}'"""
         
         #retreive data 
-<<<<<<< HEAD
         print(f"\n requesting data for {date_select[i]}")
         response_data = GetData(url_param)
         print(f"data request for {date_select[i]} complete")
-        data_log.log_table(date_select[i],len(response_data.data))
         print(f"Date: {date_select[i]}, Rows: {len(response_data.data)}")
         
-    
+        #transform data 
         print(f"transforming data for {date_select[i]}")
         transform = TransformData() 
-=======
-        print(f"requesting data for {date_select[i]}")
-        response_data = GetData(url_param)
-        print(f"data request for {date_select[i]} complete")
-        data_log.log_table(date_select[i],len(response_data.data))
-        #print(f"Date: {date_select[i]}, \n Rows: {len(response_data.data)}")
+        transform.norm(response_data.data)
         
-        #initialize class
-        print(f"transforming data for {date_select[i]}")
-        #transform = TransformData() 
->>>>>>> f91134b5d21610417ce5e5a17cbb908c379c1d83
-        #transform data 
-        #transform.norm(response_data.data)
-        
-    
         #insert data 
-        #insert = InsertData(response_data.data)
+        insert = InsertData(response_data.data)
         print(f"normalization and insertion for {date_select[i]} complete")
         
-<<<<<<< HEAD
+        #get end time
+        end_time = time.time()
+        
+        #calc run time 
+        run_time = round((end_time - start_time)/60,2)
+        
+        #log table
+        data_log.log_table(date_select[i],len(response_data.data),run_time)
+
+    
     #export log
-=======
->>>>>>> f91134b5d21610417ce5e5a17cbb908c379c1d83
     data_log.export_log()
     
 if __name__ == "__main__":
