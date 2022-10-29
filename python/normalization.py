@@ -110,7 +110,7 @@ class InsertData:
 #run      
 def main():
     #create date ranges to query with get request
-    date_select = pd.date_range('2022-08-01','2022-08-31',freq='D')
+    date_select = pd.date_range('2022-08-31','2022-09-01',freq='D')
     date_select = [str(datetime.date(i)) for i in date_select]
     
     #instantiate a log 
